@@ -47,17 +47,29 @@ class LoginController extends Controller
         if($username){
             $user->setUsername($username);
         }
+
+
         $user->setEmail($email);
         $userrole = 'user';
         $user->setUserrole($userrole);
         $user->setCreatedate($createDate);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
-        $this->addFlash(
+        // A single user by its nickname
+        $temp_user = $em->getRepository('AppBundle:user')->findOneBy(array('email' => $email));
+        if($temp_user){
+            $this->addFlash(
                 'notice',
-                'user added'
-        );
+                'user already exists'
+            );
+        }else{
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash(
+                    'notice',
+                    'user added'
+            );
+        }
+        
         return $this->redirectToRoute('crud_list');
     }
 }
