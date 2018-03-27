@@ -88,8 +88,67 @@ class CrudController extends Controller
      */
     public function editAction($id,Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('crud/edit.html.twig');
+        $single_user = $this->getDoctrine()
+        ->getRepository('AppBundle:user')
+        ->find($id);
+
+        $form = $this->createFormBuilder($single_user)
+            ->add('password', PasswordType::class, array(
+                'attr' => array(
+                    'class' => 'form-control', 
+                    'style' => 'margin-bottom:15px'
+                    )
+                ))
+            ->add('description', TextType::class, array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    'style' => 'margin-bottom:15px',
+                    'data' => $single_user->getDescription()
+                    )
+                ))
+            ->add('userrole', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 
+                'style' => 'margin-bottom:15px'),
+                'data' => $single_user->getUserrole(),                
+                'choices' => array(
+                    'Admin User' => 'admin',
+                    'General User' => 'user'
+                )
+                ))
+            ->add('Save', SubmitType::class, array(
+                'attr' => array(
+                    'class' => 'btn btn-primary', 
+                    'style' => 'margin-bottom:15px'),
+                    'label' => 'Update User'))
+            ->getForm();
+
+        $form -> handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $password = $form['password']->getData();
+            //$encoded_password = $encoder->encodePassword($user, $password);
+            $description = $form['description']->getData();
+            $userrole = $form['userrole']->getData();
+            $createDate = new\DateTime('now');
+            if(!$password){
+                $single_user->setPassword($password);
+            }
+            $single_user->setDescription($description);
+            $single_user->setCreatedate($createDate);
+            $single_user->setUserrole($userrole);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($single_user);
+            $em->flush();
+            $this->addFlash(
+                'notice',
+                'user updated'
+            );
+            return $this->redirectToRoute('crud_list');
+        }
+        return $this->render('crud/edit.html.twig',array(
+            'form' => $form->createView(),
+            'user' => $single_user
+        ));
     }
 
     /**
@@ -97,8 +156,12 @@ class CrudController extends Controller
      */
     public function detailAction($id)
     {
-        // replace this example code with whatever you need
-        return $this->render('crud/detail.html.twig');
+        $single_user = $this->getDoctrine()
+            ->getRepository('AppBundle:user')
+            ->find($id);
+        return $this->render('crud/detail.html.twig',array(
+            'user' => $single_user  
+        ));    
     }
 
     /**
@@ -106,7 +169,15 @@ class CrudController extends Controller
      */
     public function deleteAction($id)
     {
-        die('remove this user');
+        // $em = $this->getDoctrine()->getManager();
+        // $user = $em->getRepository('AppBundle:user')->find($id);
+        // $em->remove($user);
+        // $em->flush();
+        $this->addFlash(
+            'notice',
+            'user removed'
+        );
+        return $this->redirectToRoute('crud_list');
     }
 
 }

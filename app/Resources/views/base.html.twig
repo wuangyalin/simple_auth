@@ -36,9 +36,10 @@
     </nav>
 
     <main role="main" class="container">
-        <div class="row">
-            {% block body %}{% endblock %}
-        </div>
+      {% for flash_message in app.session.flashbag.get('notice') %}
+        <div class="alert alert-success mt-3">{{flash_message}}</div>
+      {% endfor %}
+      {% block body %}{% endblock %}
     </main><!-- /.container -->
      {% block javascripts %}{% endblock %}
   </body>
