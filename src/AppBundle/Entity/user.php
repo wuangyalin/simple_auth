@@ -24,37 +24,37 @@ class user
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255, unique=true)
+     * @ORM\Column(name="username", type="string", length=255)
      */
-    private $username;
+    private $username = null;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, unique=true)
      */
-    private $password;
+    private $email;
 
     /**
      * @var string
      *
      * @ORM\Column(name="userrole", type="string", length=10)
      */
-    private $userrole;
+    private $userrole = 'user';
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255)
      */
-    private $description;
+    private $description = null;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdate", type="datetimetz")
      */
-    private $createdate;
+    private $createdate = null;
 
 
     /**
@@ -92,27 +92,27 @@ class user
     }
 
     /**
-     * Set password
+     * Set email
      *
-     * @param string $password
+     * @param string $email
      *
      * @return user
      */
-    public function setPassword($password)
+    public function setEmail($email)
     {
-        $this->password = $password;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Get password
+     * Get email
      *
      * @return string
      */
-    public function getPassword()
+    public function getEmail()
     {
-        return $this->password;
+        return $this->email;
     }
 
     /**

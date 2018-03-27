@@ -7,10 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CrudController extends Controller
 {
@@ -31,13 +30,13 @@ class CrudController extends Controller
     /**
      * @Route("/crud/create", name="crud_create")
      */
-    public function createAction(Request $request,UserPasswordEncoderInterface $encoder)
+    public function createAction(Request $request)
     {
         $user = new user;
         
         $form = $this->createFormBuilder($user)
             ->add('username', TextType::class,array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px')))
-            ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px')))
+            ->add('email', EmailType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px')))
             ->add('description', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom:15px')))
             ->add('userrole', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 
@@ -57,14 +56,13 @@ class CrudController extends Controller
         $form -> handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $username = $form['username']->getData();
-            $password = $form['password']->getData();
-            //$encoded_password = $encoder->encodePassword($user, $password);
+            $email = $form['email']->getData();
             $description = $form['description']->getData();
             $userrole = $form['userrole']->getData();
             $createDate = new\DateTime('now');
 
             $user->setUsername($username);
-            $user->setPassword($password);
+            $user->setEmail($email);
             $user->setDescription($description);
             $user->setCreatedate($createDate);
             $user->setUserrole($userrole);
@@ -93,7 +91,13 @@ class CrudController extends Controller
         ->find($id);
 
         $form = $this->createFormBuilder($single_user)
-            ->add('password', PasswordType::class, array(
+            ->add('username', TextType::class, array(
+            'attr' => array(
+                'class' => 'form-control', 
+                'style' => 'margin-bottom:15px'
+                )
+            ))
+            ->add('email', EmailType::class, array(
                 'attr' => array(
                     'class' => 'form-control', 
                     'style' => 'margin-bottom:15px'
@@ -124,13 +128,12 @@ class CrudController extends Controller
 
         $form -> handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $password = $form['password']->getData();
-            //$encoded_password = $encoder->encodePassword($user, $password);
+            $email = $form['email']->getData();
             $description = $form['description']->getData();
             $userrole = $form['userrole']->getData();
             $createDate = new\DateTime('now');
-            if(!$password){
-                $single_user->setPassword($password);
+            if(!$email){
+                $single_user->setEmail($email);
             }
             $single_user->setDescription($description);
             $single_user->setCreatedate($createDate);
@@ -169,10 +172,10 @@ class CrudController extends Controller
      */
     public function deleteAction($id)
     {
-        // $em = $this->getDoctrine()->getManager();
-        // $user = $em->getRepository('AppBundle:user')->find($id);
-        // $em->remove($user);
-        // $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:user')->find($id);
+        $em->remove($user);
+        $em->flush();
         $this->addFlash(
             'notice',
             'user removed'
