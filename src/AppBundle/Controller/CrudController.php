@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\RoleEntity;
 
 class CrudController extends Controller
 {
@@ -32,6 +34,8 @@ class CrudController extends Controller
      */
     public function editAction($id,Request $request)
     {
+        $roles = $this->getParameter('security.role_hierarchy.roles');
+
         $single_user = $this->getDoctrine()
         ->getRepository('AppBundle:user')
         ->find($id);
@@ -53,9 +57,17 @@ class CrudController extends Controller
                 'attr' => array('class' => 'form-control', 
                 'style' => 'margin-bottom:15px'),
                 'choices' => array(
-                    'Admin User' => 'ROLE_ADMIN',
-                    'General User' => 'ROLE_USER'
-                    )
+                    'ROLE_ADMIN' => array
+                        (
+                            'Yes' => 'ROLE_ADMIN',
+                        ),
+                    'ROLE_USER' => array
+                        (
+                            'Yes' => 'ROLE_USER'
+                        ),
+                    ),
+                'multiple' => true,
+                'required' => true,
                 ))
             ->add('Save', SubmitType::class, array(
                 'attr' => array(
@@ -67,12 +79,9 @@ class CrudController extends Controller
         $form -> handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $email = $form['email']->getData();
-            $userrole = $form['user_role']->getData();
             if(!$email){
                 $single_user->setEmail($email);
             }
-            $single_user->setUserRole($userrole);
-            $single_user->addRole($userrole);
             $em = $this->getDoctrine()->getManager();
             $em->persist($single_user);
             $em->flush();
