@@ -28,12 +28,15 @@
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/crud/create">Create</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Google Login</a>
-          </li>
+          {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/googlelogin">Google Login</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </nav>

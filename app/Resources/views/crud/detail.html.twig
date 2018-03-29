@@ -5,15 +5,16 @@
     </div>
     <h1 class="text-center mt-5"> Detail for {{user.username}} </h1>
 
-    <table class="table mt-5">
+<table class="table mt-5">
   <thead>
     <tr>
       <th scope="col">User ID</th>
       <th scope="col">User Name</th>
       <th scope="col">Email</th>
       <th scope="col">User Role</th>
-      <th scope="col">Join Time</th>
+      {% if is_granted('ROLE_ADMIN') %}
       <th scope="col">Handle</th>
+       {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -22,17 +23,20 @@
       <td>{{user.username}}</td>
       <td>{{user.email}}</td>
       <td>{{user.userrole}}</td>
-	  <td>{{user.createdate|date('j F Y')}}</td>
-      <td>
+      {% if is_granted('ROLE_ADMIN') %}
+			<td>
         <ul class="list-inline">
-			<li class="list-inline-item">
-                <a href="/crud/edit/{{user.id}}" class="btn btn-sm btn-success">Edit</a>
-            </li>
-            <li class="list-inline-item">
-                <a href="/crud/delete/{{user.id}}" class="btn btn-sm btn-danger">Delete</a>
-            <li>
+					<li class="list-inline-item">
+            <a href="/crud/edit/{{user.id}}" class="btn btn-sm btn-success">Edit</a>
+          </li>
+          <li class="list-inline-item">
+            <a href="/crud/delete/{{user.id}}" class="btn btn-sm btn-danger">Delete</a>
+          <li>
+
         </ul>
       </td>
+      {% endif %}
+      
     </tr>
   </tbody>
 </table>

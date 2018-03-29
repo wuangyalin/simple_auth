@@ -1,190 +1,57 @@
 <?php
+// src/AppBundle/Entity/User.php
 
 namespace AppBundle\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * user
- *
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\userRepository")
+ * @ORM\Entity
+ * @ORM\Table(name="fos_user")
  */
-class user
+class user extends BaseUser
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=255)
-     */
-    private $username = null;
+    /** @ORM\Column(name="googleplus_id", type="string", length=255, nullable=true) */
+    protected $googleplus_id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, unique=true)
-     */
-    private $email;
+    /** @ORM\Column(name="user_role", type="string", length=255, nullable=false) */
+    protected $user_role;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="userrole", type="string", length=10)
-     */
-    private $userrole = 'user';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255)
-     */
-    private $description = null;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="createdate", type="datetimetz")
-     */
-    private $createdate = null;
-
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
+    public function __construct()
     {
-        return $this->id;
+        parent::__construct();
+        // your own logic
     }
 
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return user
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
 
+    public function setGoogleplusId($googlePlusId) {
+        $this->googleplus_id = $googlePlusId;
+    
         return $this;
     }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
+    
+    public function getGoogleplusId() {
+        return $this->googleplus_id;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return user
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
 
+    public function setUserRole($userRole) {
+        $this->user_role = $userRole;
+        $this->addRole($userRole);
         return $this;
     }
+    
+    public function getUserRole() {
 
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
+        return $this->user_role;
     }
-
-    /**
-     * Set userrole
-     *
-     * @param string $userrole
-     *
-     * @return user
-     */
-    public function setUserrole($userrole)
-    {
-        $this->userrole = $userrole;
-
-        return $this;
-    }
-
-    /**
-     * Get userrole
-     *
-     * @return string
-     */
-    public function getUserrole()
-    {
-        return $this->userrole;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return user
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set createdate
-     *
-     * @param \DateTime $createdate
-     *
-     * @return user
-     */
-    public function setCreatedate($createdate)
-    {
-        $this->createdate = $createdate;
-
-        return $this;
-    }
-
-    /**
-     * Get createdate
-     *
-     * @return \DateTime
-     */
-    public function getCreatedate()
-    {
-        return $this->createdate;
-    }
+    
 }
-
