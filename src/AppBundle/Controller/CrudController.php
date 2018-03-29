@@ -49,14 +49,14 @@ class CrudController extends Controller
                     'style' => 'margin-bottom:15px'
                     )
                 ))
-            ->add('user_role', ChoiceType::class, array(
+            ->add('roles', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 
                 'style' => 'margin-bottom:15px'),
                 'choices' => array(
                     'Admin User' => 'ROLE_ADMIN',
                     'General User' => 'ROLE_USER'
                     )
-                ))        
+                ))
             ->add('Save', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'btn btn-primary', 

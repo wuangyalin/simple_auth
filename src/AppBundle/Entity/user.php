@@ -22,9 +22,6 @@ class user extends BaseUser
     /** @ORM\Column(name="googleplus_id", type="string", length=255, nullable=true) */
     protected $googleplus_id;
 
-    /** @ORM\Column(name="user_role", type="string", length=255, nullable=false) */
-    protected $user_role;
-
     public function __construct()
     {
         parent::__construct();
@@ -42,16 +39,4 @@ class user extends BaseUser
         return $this->googleplus_id;
     }
 
-
-    public function setUserRole($userRole) {
-        $this->user_role = $userRole;
-        $this->addRole($userRole);
-        return $this;
-    }
-    
-    public function getUserRole() {
-
-        return $this->user_role;
-    }
-    
 }

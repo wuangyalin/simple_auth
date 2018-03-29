@@ -55,9 +55,7 @@ class LoginController extends Controller
         }
         $user->setGoogleplusId($google_id);
         $user->setEmail($email);
-        //$user->setUserRole('ROLE_USER');
-        $user->setUserRole('ROLE_USER');
-        //$user->addRole('ROLE_ADMIN');
+        $user->addRole('ROLE_ADMIN');
 
         $em = $this->getDoctrine()->getManager();
         // A single user by its nickname
