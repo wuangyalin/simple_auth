@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <h1 class="text-center mt-5"> User List </h1>
+<div class="table-responsive">
+
 <table class="table mt-5">
   <thead>
     <tr>
       <th scope="col">User ID</th>
       <th scope="col">User Name</th>
       <th scope="col">Email</th>
-      <th scope="col">User Role(s)</th>
+      <th scope="col">User Role</th>
       <th scope="col">Handle</th>
     </tr>
   </thead>
@@ -17,24 +19,40 @@
       <th scope="row">{{user.id}}</th>
       <td>{{user.username}}</td>
       <td>{{user.email}}</td>
-      <td>{{ user.roles|join(', ') }}</td>   
+      <td>{{ user.roles|first}}</td>
+      {% if (current_user_id == user.id) %}
+        {% if is_granted('ROLE_ADMIN')  %}
+        <td>You can edit other user(s) :)</td>
+        {% else %}
         <td>
         <ul class="list-inline">
-				  <li class="list-inline-item">
+          <li class="list-inline-item">
             <a href="/crud/detail/{{user.id}}" class="btn btn-sm btn-info">View</a>
           </li>
-          {% if is_granted('ROLE_ADMIN') %}
-					<li class="list-inline-item">
-            <a href="/crud/edit/{{user.id}}" class="btn btn-sm btn-success">Edit</a>
-          </li>
-          <li class="list-inline-item">
-            <a href="/crud/delete/{{user.id}}" class="btn btn-sm btn-danger">Delete</a>
-          <li>
-          {% endif %}
+          </ul>
+      </td>
+        {% endif %}
+      {% else %}
+        <td>
+        <ul class="list-inline">
+
+            <li class="list-inline-item">
+              <a href="/crud/detail/{{user.id}}" class="btn btn-sm btn-info">View</a>
+            </li>
+            {% if is_granted('ROLE_ADMIN') %}
+            <li class="list-inline-item">
+              <a href="/crud/edit/{{user.id}}" class="btn btn-sm btn-success">Edit</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="/crud/delete/{{user.id}}" class="btn btn-sm btn-danger">Delete</a>
+            <li>
+            {% endif %}
         </ul>
       </td>
+      {% endif %}
     </tr>
 		{% endfor %}
   </tbody>
 </table>
+</div>
 {% endblock %}

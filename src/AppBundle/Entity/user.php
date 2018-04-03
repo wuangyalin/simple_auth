@@ -22,6 +22,9 @@ class user extends BaseUser
     /** @ORM\Column(name="googleplus_id", type="string", length=255, nullable=true) */
     protected $googleplus_id;
 
+    /** @ORM\Column(name="googleplus_picture", type="string", length=255, nullable=true) */
+    protected $googleplus_picture;
+
     public function __construct()
     {
         parent::__construct();
@@ -37,6 +40,16 @@ class user extends BaseUser
     
     public function getGoogleplusId() {
         return $this->googleplus_id;
+    }
+
+    public function setgoogleplus_picture($googlePlusPicture) {
+        $this->googleplus_picture = $googlePlusPicture;
+    
+        return $this;
+    }
+    
+    public function getgoogleplus_picture() {
+        return $this->googleplus_picture;
     }
 
 }

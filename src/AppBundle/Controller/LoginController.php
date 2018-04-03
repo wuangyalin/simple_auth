@@ -12,10 +12,11 @@ use AppBundle\Entity\user;
 
 class LoginController extends Controller
 {
+
    /**
-     * @Route("/googlelogin", name="login")
+     * @Route("/googlelogin", name="googlelogin")
      */
-    public function loginAction() 
+    public function googleloginAction() 
     {
         $client= new \Google_Client();
         $client->setApplicationName('Simple Auth');// to set app name
@@ -43,7 +44,10 @@ class LoginController extends Controller
         $code=$client->authenticate($_GET['code']);// to get code
         $client->setAccessToken($code);// to get access token by setting of $code
         $userDetails=$service->userinfo->get();// to get user detail by using access token
+        // print_r($userDetails);
+        // die();
         $username = $userDetails->name;
+        $user_picture = $userDetails->picture;
         $email = $userDetails->email;
         $google_id = $userDetails->id;
         $user = new user;
@@ -53,9 +57,13 @@ class LoginController extends Controller
         }else{
             $user->setUsername($google_id);
         }
+        $user->setgoogleplus_picture($user_picture);
         $user->setGoogleplusId($google_id);
         $user->setEmail($email);
         $user->addRole('ROLE_ADMIN');
+        $user->setPlainPassword('simpe-auth');
+        $user->setEnabled(1);
+
 
         $em = $this->getDoctrine()->getManager();
         // A single user by its nickname

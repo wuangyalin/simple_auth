@@ -4,14 +4,17 @@
         <a href="/" class="btn btn-danger">Back to main</a>
     </div>
     <h1 class="text-center mt-5"> Detail for {{user.username}} </h1>
-
+<div class="table-responsive">
 <table class="table mt-5">
   <thead>
     <tr>
       <th scope="col">User ID</th>
+      {% if user.googleplus_picture %}
+      <th scope="col">User Avatar</th>
+      {% endif %}
       <th scope="col">User Name</th>
       <th scope="col">Email</th>
-      <th scope="col">User Role(s)</th>
+      <th scope="col">User Role</th>
       {% if is_granted('ROLE_ADMIN') %}
       <th scope="col">Handle</th>
        {% endif %}
@@ -20,9 +23,13 @@
   <tbody>
     <tr>
       <th scope="row">{{user.id}}</th>
+      {% if user.googleplus_picture %}
+      <td><img src="{{user.googleplus_picture}}" width="30" height="30" class="img-fluid" alt="Responsive image">
+      </td>
+      {% endif %}
       <td>{{user.username}}</td>
       <td>{{user.email}}</td>
-      <td>{{ user.roles|join(', ') }}</td>   
+      <td>{{ user.roles|first }}</td>   
       {% if is_granted('ROLE_ADMIN') %}
 			<td>
         <ul class="list-inline">
@@ -40,4 +47,5 @@
     </tr>
   </tbody>
 </table>
+</div>
 {% endblock %}

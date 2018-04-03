@@ -31,6 +31,9 @@ security:
         - { path: ^/crud/delete/, role: ROLE_ADMIN }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/crud/detail/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/crud/create/, role: ROLE_ADMIN }
+
+        
 
 
 

@@ -1,0 +1,10 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block fos_user_content %}
+    {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')) %}
+        <h1>You have signed in. Click <a href="/" href="btn btn-default"> here </a> to go back.
+    {% else %}
+    <h1 class="text-center mt-5"> User Login </h1>
+    {{ include('@FOSUser/Security/login_content.html.twig') }}
+    {% endif %}
+{% endblock fos_user_content %}
