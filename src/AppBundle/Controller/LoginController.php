@@ -20,10 +20,18 @@ class LoginController extends Controller
     {
         $client= new \Google_Client();
         $client->setApplicationName('Simple Auth');// to set app name
-        $client->setClientId('303810699327-8p0ve2rmd2toohrild5db4q40ugbt9jl.apps.googleusercontent.com');// to set app id or client id
-        $client->setClientSecret('hVWLZzCzUzuvzAk3TGjGH4cU');// to set app secret or client secret
+        $credentials_path = $this->getParameter('google_credentialspath');
+        $client->setAuthConfig($credentials_path);
+
         $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/redirect');
+
+        // $client->setScopes(\Google_Service_Drive::DRIVE_METADATA_READONLY);
+        // $client->setAccessType('offline');        // offline access
+        // $client->setIncludeGrantedScopes(true);   // incremental auth
+
+        $client->addScope('profile');
         $client->addScope('email');
+        $client->addScope(\Google_Service_Drive::DRIVE_METADATA_READONLY);
 
         $url= $client->createAuthUrl();// to get login url
         // echo '<a href="' . $url . '">Log in with Google!</a>';
@@ -37,15 +45,33 @@ class LoginController extends Controller
     {
         $client= new \Google_Client();
         $client->setApplicationName('Simple Auth');// to set app name
-        $client->setClientId('303810699327-8p0ve2rmd2toohrild5db4q40ugbt9jl.apps.googleusercontent.com');// to set app id or client id
-        $client->setClientSecret('hVWLZzCzUzuvzAk3TGjGH4cU');// to set app secret or client secret
+        $credentials_path = $this->getParameter('google_credentialspath');
+        $client->setAuthConfig($credentials_path);
         $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/redirect');
         $service = new \Google_Service_Oauth2($client);
         $code=$client->authenticate($_GET['code']);// to get code
-        $client->setAccessToken($code);// to get access token by setting of $code
-        $userDetails=$service->userinfo->get();// to get user detail by using access token
-        // print_r($userDetails);
+        $access_token = $client->getAccessToken();
+        $client->setAccessToken($access_token);// to get access token by setting of $code
+
+        /**
+         * get google drive file
+         */
+        // $drive = new \Google_Service_Drive($client);
+        // $files_list = $drive->files->listFiles(array())->getFiles();
+        // if (count($files_list) == 0) {
+        //     print "No files found.\n";
+        // } else {
+        //     foreach ($files_list as $file) {
+        //         $res['name'] = $file->getName();
+        //         $res['id'] = $file->getId();
+        //         $files[] = $res;
+        //     }
+        //     dump($files);
+        // }
+        
         // die();
+        
+        $userDetails=$service->userinfo->get();// to get user detail by using access token
         $username = $userDetails->name;
         $user_picture = $userDetails->picture;
         $email = $userDetails->email;
