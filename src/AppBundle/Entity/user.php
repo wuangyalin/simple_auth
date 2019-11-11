@@ -25,6 +25,9 @@ class user extends BaseUser
     /** @ORM\Column(name="googleplus_picture", type="string", length=255, nullable=true) */
     protected $googleplus_picture;
 
+    /** @ORM\Column(name="full_name", type="string", length=255, nullable=true) */
+    protected $fullName;
+
     public function __construct()
     {
         parent::__construct();
@@ -52,4 +55,13 @@ class user extends BaseUser
         return $this->googleplus_picture;
     }
 
+    public function getFullName() {
+        return $this->fullName;
+    }
+
+    public function setFullName($fullName) {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
 }

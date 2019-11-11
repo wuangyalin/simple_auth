@@ -3,7 +3,7 @@
     <div class="row"> 
         <a href="/" class="btn btn-danger">Back to main</a>
     </div>
-    <h1 class="text-center mt-5"> Detail for {{user.username}} </h1>
+    <h1 class="text-center mt-5"> Detail for {{user.fullName}} </h1>
 <div class="table-responsive">
 <table class="table mt-5">
   <thead>
@@ -27,7 +27,7 @@
       <td><img src="{{user.googleplus_picture}}" width="30" height="30" class="img-fluid" alt="Responsive image">
       </td>
       {% endif %}
-      <td>{{user.username}}</td>
+      <td>{{user.fullName}}</td>
       <td>{{user.email}}</td>
       <td>{{ user.roles|first }}</td>   
       {% if is_granted('ROLE_ADMIN') %}

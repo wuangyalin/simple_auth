@@ -70,18 +70,25 @@ class LoginController extends Controller
         // }
         
         // die();
-        
+
         $userDetails=$service->userinfo->get();// to get user detail by using access token
-        $username = $userDetails->name;
+
+        $familyName = $userDetails->familyName;
+        $fullname = $userDetails->name;
+
         $user_picture = $userDetails->picture;
         $email = $userDetails->email;
         $google_id = $userDetails->id;
         $user = new user;
-        if($username){
-            $user->setUsername($username);
-            
+        if($familyName){
+            $user->setUsername($familyName.'-'.$google_id);
         }else{
             $user->setUsername($google_id);
+        }
+        if($fullname){
+            $user->setFullName($fullname);
+        }else{
+            $user->setFullName($user->getUsername());
         }
         $user->setgoogleplus_picture($user_picture);
         $user->setGoogleplusId($google_id);

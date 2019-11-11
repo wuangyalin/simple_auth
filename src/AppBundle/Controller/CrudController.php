@@ -54,6 +54,12 @@ class CrudController extends Controller
                 'style' => 'margin-bottom:15px'
                 )
             ))
+            ->add('fullName', TextType::class, array(
+            'attr' => array(
+                'class' => 'form-control', 
+                'style' => 'margin-bottom:15px'
+                )
+            ))
             ->add('email', EmailType::class, array(
                 'attr' => array(
                     'class' => 'form-control', 
@@ -144,6 +150,12 @@ class CrudController extends Controller
         //create form
         $form = $this->createFormBuilder($single_user)
             ->add('username', TextType::class, array(
+            'attr' => array(
+                'class' => 'form-control', 
+                'style' => 'margin-bottom:15px'
+                )
+            ))
+            ->add('fullName', TextType::class, array(
             'attr' => array(
                 'class' => 'form-control', 
                 'style' => 'margin-bottom:15px'

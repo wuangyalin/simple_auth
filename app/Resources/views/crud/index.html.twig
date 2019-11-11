@@ -17,21 +17,17 @@
 	{% for user in users %}
     <tr>
       <th scope="row">{{user.id}}</th>
-      <td>{{user.username}}</td>
+      <td>{{user.fullName}}</td>
       <td>{{user.email}}</td>
       <td>{{ user.roles|first}}</td>
       {% if (current_user_id == user.id) %}
-        {% if is_granted('ROLE_ADMIN')  %}
-        <td>You can edit other user(s) :)</td>
-        {% else %}
-        <td>
+      <td>
         <ul class="list-inline">
           <li class="list-inline-item">
             <a href="/crud/detail/{{user.id}}" class="btn btn-sm btn-info">View</a>
           </li>
           </ul>
       </td>
-        {% endif %}
       {% else %}
         <td>
         <ul class="list-inline">
